@@ -477,6 +477,7 @@ def start(update: Update, context: CallbackContext):
                                   f"Press /help for more info.")
     sticker = open('app/static/' + 'sticker.webp', 'rb')
     context.bot.send_sticker(chat_id=update.message.chat_id, sticker=sticker)
+    return ConversationHandler.END
 
 
 def help_(update: Update, context: CallbackContext):
@@ -491,6 +492,7 @@ def help_(update: Update, context: CallbackContext):
                                   "- /check_health_condition: to check your current physical condition.\n"
                                   "- /plan_for_trainings: check the training plan.\n"
                                   "- /motivate_yourself: random videos for motivation")
+    return ConversationHandler.END
 
 
 def button_back_menu():
