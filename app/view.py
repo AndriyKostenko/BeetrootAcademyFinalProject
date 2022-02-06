@@ -533,8 +533,8 @@ def main():
             PREFERABLE_SPORT: [
                 MessageHandler(Filters.text & (~Filters.command), finish_handler, pass_user_data=True)],
         },
-        fallbacks=[CommandHandler('cancel', cancel_handler), CallbackQueryHandler(cancel_handler, pattern='cancel'),
-                   CommandHandler('help', help_), CommandHandler('start', start)],
+        fallbacks=[CommandHandler('cancel', cancel_handler), CommandHandler('help', help_),
+                   CommandHandler('start', start), CallbackQueryHandler(cancel_handler, pattern='cancel')],
     )
 
     trainings_conv_handler = ConversationHandler(
@@ -544,8 +544,8 @@ def main():
             PUSH_UPS: [MessageHandler(Filters.text & (~Filters.command), push_ups_handler, pass_user_data=True), ],
             SIT_UPS: [MessageHandler(Filters.text & (~Filters.command), finish2_handler, pass_user_data=True), ],
         },
-        fallbacks=[CommandHandler('cancel', cancel_handler), CallbackQueryHandler(cancel_handler, pattern='cancel'),
-                   CommandHandler('help', help_), CommandHandler('start', start)],
+        fallbacks=[CommandHandler('cancel', cancel_handler), CommandHandler('help', help_),
+                   CommandHandler('start', start), CallbackQueryHandler(cancel_handler, pattern='cancel')],
     )
 
     # SQL database
