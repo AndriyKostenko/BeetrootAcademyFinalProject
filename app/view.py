@@ -87,7 +87,7 @@ def surname_handler(update: Update, context: CallbackContext):
                              text='✔ Info accepted.',
                              reply_markup=button_back_menu())
     context.bot.send_message(chat_id=update.effective_chat.id,
-                             text='Please, enter your age (ex. 27):', )
+                             text='3️⃣ Please, enter your age (ex. 27):', )
     return AGE
 
 
@@ -103,7 +103,7 @@ def age_handler(update: Update, context: CallbackContext):
                              text='✔ Info accepted.',
                              reply_markup=button_back_menu())
     context.bot.send_message(chat_id=update.effective_chat.id,
-                             text='3️⃣ Please, enter your height in cm. (ex. 175):', )
+                             text='4️⃣  Please, enter your height in cm. (ex. 175):', )
     return HEIGHT
 
 
@@ -119,7 +119,7 @@ def height_handler(update: Update, context: CallbackContext):
                              text='✔ Info accepted.',
                              reply_markup=button_back_menu())
     context.bot.send_message(chat_id=update.effective_chat.id,
-                             text='4️⃣ Please, enter your weight in kgs (ex. 51):', )
+                             text='5️⃣ Please, enter your weight in kgs (ex. 51):', )
     return WEIGHT
 
 
@@ -134,7 +134,7 @@ def weight_handler(update: Update, context: CallbackContext):
                              text='✔ Info accepted.',
                              reply_markup=button_back_menu())
     context.bot.send_message(chat_id=update.effective_chat.id,
-                             text='5️⃣ Please, enter your current pulse (ex. 90):')
+                             text='6️⃣ Please, enter your current pulse (ex. 90):')
     return PULSE
 
 
@@ -150,7 +150,7 @@ def pulse_handler(update: Update, context: CallbackContext):
                              text='✔ Info accepted.',
                              reply_markup=button_back_menu())
     context.bot.send_message(chat_id=update.effective_chat.id,
-                             text='6️⃣ Please, enter your current arterial pressure (ex. 120/80):')
+                             text='7️⃣ Please, enter your current arterial pressure (ex. 120/80):')
     return ARTERIAL_PRESSURE
 
 
@@ -166,7 +166,7 @@ def arterial_pressure_handler(update: Update, context: CallbackContext):
                              text='✔ Info accepted.',
                              reply_markup=button_back_menu())
     context.bot.send_message(chat_id=update.effective_chat.id,
-                             text='7️⃣ Please, enter your preferable sport (ex. football):')
+                             text='8️⃣ Please, enter your preferable sport (ex. football):')
     return PREFERABLE_SPORT
 
 
@@ -533,8 +533,7 @@ def main():
             PREFERABLE_SPORT: [
                 MessageHandler(Filters.text & (~Filters.command), finish_handler, pass_user_data=True)],
         },
-        fallbacks=[CommandHandler('cancel', cancel_handler), CommandHandler('help', help_),
-                   CommandHandler('start', start), CallbackQueryHandler(cancel_handler, pattern='cancel')],
+        fallbacks=[MessageHandler(Filters.command, cancel_handler), CommandHandler('cancel', cancel_handler), CallbackQueryHandler(cancel_handler, pattern='cancel')],
     )
 
     trainings_conv_handler = ConversationHandler(
@@ -544,8 +543,7 @@ def main():
             PUSH_UPS: [MessageHandler(Filters.text & (~Filters.command), push_ups_handler, pass_user_data=True), ],
             SIT_UPS: [MessageHandler(Filters.text & (~Filters.command), finish2_handler, pass_user_data=True), ],
         },
-        fallbacks=[CommandHandler('cancel', cancel_handler), CommandHandler('help', help_),
-                   CommandHandler('start', start), CallbackQueryHandler(cancel_handler, pattern='cancel')],
+        fallbacks=[MessageHandler(Filters.command, cancel_handler), CommandHandler('cancel', cancel_handler), CallbackQueryHandler(cancel_handler, pattern='cancel')],
     )
 
     # SQL database
