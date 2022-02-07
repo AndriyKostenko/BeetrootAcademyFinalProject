@@ -522,7 +522,7 @@ def cancel_handler(update: Update, context: CallbackContext):
 
 def pdf_report(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id,
-                             text="The document is generating now.")
+                             text="The document is gen")
     # save FPDF() class into a
     # variable pdf
     pdf = FPDF()
@@ -547,14 +547,12 @@ def pdf_report(update: Update, context: CallbackContext):
     # save the pdf with name .pdf
     res = pdf.output(f"Health-report.pdf")
     context.bot.send_document(chat_id=update.effective_chat.id,
-                             document=open("Health-report.pdf", 'rb')
+                             document=open("Health-report.pdf", 'rb'))
 
 
 
 
 @fapp.route('/', methods=['GET', 'POST'])
-
-
 def main():
     # Create the Updater
     updater = Updater(Config.TBOT_TOKEN, use_context=True)
