@@ -515,6 +515,8 @@ def main():
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
+    dp.add_handler(CommandHandler('start', start))
+    dp.add_handler(CommandHandler('help', help_))
 
 
 
@@ -552,8 +554,7 @@ def main():
     )
     # On different commands
 
-    dp.add_handler(CommandHandler('start', start))
-    dp.add_handler(CommandHandler('help', help_))
+
 
 
     # SQL database
