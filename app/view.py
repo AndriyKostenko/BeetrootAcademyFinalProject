@@ -4,7 +4,7 @@ import re
 import random
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext, MessageHandler, ConversationHandler, CommandHandler, Filters, Updater
-from telegram.ext import CallbackQueryHandler
+from telegram.ext import CallbackQueryHandler, H
 from datetime import date
 from app import db, fapp
 from config import Config
@@ -551,15 +551,17 @@ def main():
         allow_reentry=True
     )
     # On different commands
-    dp.add_handler(CommandHandler('start', start), 1)
-    dp.add_handler(CommandHandler('help', help_), 1)
 
-    dp.add_handler(MessageHandler(Filters.command & (~ Filters.regex('^(\/add_or_update_info |\/plan_for_trainings|\/bar)$')), cancel_handler), 1)
+    dp.add_handler(CommandHandler('start', start), 2)
+    dp.add_handler(CommandHandler('help', help_))
+
+
 
 
     # SQL database
-    dp.add_handler(personal_data_conv_handler, 2)
-    dp.add_handler(trainings_conv_handler, 3)
+    dp.add_handler(personal_data_conv_handler, 1)
+    dp.add_handler(trainings_conv_handler)
+
     dp.add_handler(CommandHandler('add_or_update_info', add_info))
     dp.add_handler(CommandHandler('remove_info', remove_info))
     dp.add_handler(CommandHandler('show_info', show_info))
