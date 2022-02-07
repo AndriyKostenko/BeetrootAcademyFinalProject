@@ -4,7 +4,7 @@ import re
 import random
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext, MessageHandler, ConversationHandler, CommandHandler, Filters, Updater
-from telegram.ext import CallbackQueryHandler, H
+from telegram.ext import CallbackQueryHandler
 from datetime import date
 from app import db, fapp
 from config import Config
