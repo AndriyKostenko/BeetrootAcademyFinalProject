@@ -522,9 +522,9 @@ def main():
     personal_data_conv_handler = ConversationHandler(
         entry_points=[CommandHandler('add_or_update_info', add_info)],
         states={
-            NAME: [MessageHandler(Filters.text & Filters.command, name_handler, pass_user_data=True)],
-            SURNAME: [MessageHandler(Filters.text & Filters.command, surname_handler, pass_user_data=True)],
-            AGE: [MessageHandler(Filters.text & Filters.command, age_handler, pass_user_data=True)],
+            NAME: [MessageHandler(Filters.text & (~Filters.command), name_handler, pass_user_data=True)],
+            SURNAME: [MessageHandler(Filters.text & (~Filters.command), surname_handler, pass_user_data=True)],
+            AGE: [MessageHandler(Filters.text & (~Filters.command), age_handler, pass_user_data=True)],
             HEIGHT: [MessageHandler(Filters.text & (~Filters.command), height_handler, pass_user_data=True)],
             WEIGHT: [MessageHandler(Filters.text & (~Filters.command), weight_handler, pass_user_data=True)],
             PULSE: [MessageHandler(Filters.text & (~Filters.command), pulse_handler, pass_user_data=True)],
@@ -533,7 +533,8 @@ def main():
             PREFERABLE_SPORT: [
                 MessageHandler(Filters.text & (~Filters.command), finish_handler, pass_user_data=True)],
         },
-        fallbacks=[CommandHandler('start', start), CommandHandler('cancel', cancel_handler), CallbackQueryHandler(cancel_handler, pattern='cancel')],
+        fallbacks=[CommandHandler('cancel', cancel_handler), CallbackQueryHandler(cancel_handler, pattern='cancel'),
+                   CommandHandler('start', start)],
     )
 
     trainings_conv_handler = ConversationHandler(
