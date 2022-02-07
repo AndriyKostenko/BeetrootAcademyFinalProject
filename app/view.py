@@ -560,7 +560,7 @@ def pdf_report(update: Update, context: CallbackContext):
                                       f"( 0-16 ) =  you must to increase your weight.\n"
                                       f"( 25-40 ) =  overweight, you must to decrease your weight.\n"
                                       f"In generally:\nThe weight index means the correspondence between "
-                                      f"a person’s mass and his height."
+                                      f"a persons mass and his height."
                                       f"It's evaluating whether the weight is insufficient, normal or "
                                       f"excessive.\n"
                                       f"\n Your physical index: {physical_index}\n"
