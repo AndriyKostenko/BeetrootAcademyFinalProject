@@ -533,7 +533,7 @@ def main():
             PREFERABLE_SPORT: [
                 MessageHandler(Filters.text & (~Filters.command), finish_handler, pass_user_data=True)],
         },
-        fallbacks=[CommandHandler('cancel', cancel_handler), CallbackQueryHandler(cancel_handler, pattern='cancel')],
+        fallbacks=[MessageHandler(Filters.text & (~Filters.command), start), CommandHandler('cancel', cancel_handler), CallbackQueryHandler(cancel_handler, pattern='cancel')],
     )
 
     trainings_conv_handler = ConversationHandler(
