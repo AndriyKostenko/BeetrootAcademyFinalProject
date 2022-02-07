@@ -503,8 +503,8 @@ def help_(update: Update, context: CallbackContext):
                                   "\n‍🔥 Things you can check 🔥️\n"
                                   "- /check_health_condition: to check your current physical condition.\n"
                                   "- /plan_for_trainings: check the training plan.\n"
-                                  "- /motivate_yourself: random videos for motivation"
-                                  "- /pdf_report ")
+                                  "- /motivate_yourself: random videos for motivation\n"
+                                  "- /pdf_report: health-condition report")
     return ConversationHandler.END
 
 
@@ -529,6 +529,8 @@ def pdf_report(update: Update, context: CallbackContext):
     if user:
         if user.height and user.weight and user.pulse and user.age and user.arterial_pressure:
             try:
+                context.bot.send_message(chat_id=update.effective_chat.id,
+                                         text="The document is generating now...")
                 # weight_index_of_body = weight_kgs/(height_mtr^2)
                 weight_index = "{:.3}".format((user.weight / ((user.height / 100) ** 2)))
 
@@ -538,30 +540,6 @@ def pdf_report(update: Update, context: CallbackContext):
                 physical_index = "{:.3}".format((
                         (700 - (3 * user.pulse) - (2.5 * (eval(user.arterial_pressure))) - (2.7 * user.age)) /
                         (350 - (2.6 * user.age) + (0.21 * user.height)) - 0.5))
-
-                context.bot.send_message(chat_id=update.effective_chat.id,
-                                         text=f"🏆 Health Condition Report 🏆\n"
-                                              f"\nYour weight index: {weight_index}\n"
-                                              f"⇨ ( 18-25 ) = 🥇 = good condition.\n"
-                                              f"⇨ ( 16-18 ) = 🥈 = your weight is below normal.\n"
-                                              f"⇨ ( 0-16 ) = 🥉 = you must to increase your weight.\n"
-                                              f"⇨ ( 25-40 ) = 🥉 = overweight, you must to decrease your weight.\n"
-                                              f"In generally:\nThe weight index means the correspondence between "
-                                              f"a person’s mass and his height."
-                                              f"It's evaluating whether the weight is insufficient, normal or "
-                                              f"excessive.\n"
-                                              f"\n Your physical index: {physical_index}\n"
-                                              f"⇨ ( index>0.825 ) = 🦸 !Superman! 🦸\n"
-                                              f"⇨ ( 0.676-0.825 ) = 🥇 = above the average.\n"
-                                              f"⇨ ( 0.526-0.676 ) = 🥈 = average.\n"
-                                              f"⇨ ( index<0.526 ) = 🥉 = below average.\n"
-                                              f"In generaly:\n"
-                                              f"Physical index it is a complex of morphological, physical and "
-                                              f"functional indicators"
-                                              f"that shows the state of your body.\n"
-                                              f"If its value is below average, you "
-                                              f"should do "
-                                              f"health training and change your lifestyle towards a healthier one.\n ")
 
                 # save FPDF() class into a
                 # variable pdf
@@ -575,28 +553,29 @@ def pdf_report(update: Update, context: CallbackContext):
                 pdf.set_font("Arial", size=15)
 
                 # create a cell
-                pdf.cell(200, 10, txt=f"🏆 Health Condition Report 🏆\n"
+                pdf.cell(200, 10, txt=f" Health Condition Report \n"
                                       f"\nYour weight index: {weight_index}\n"
-                                      f"⇨ ( 18-25 ) = 🥇 = good condition.\n"
-                                      f"⇨ ( 16-18 ) = 🥈 = your weight is below normal.\n"
-                                      f"⇨ ( 0-16 ) = 🥉 = you must to increase your weight.\n"
-                                      f"⇨ ( 25-40 ) = 🥉 = overweight, you must to decrease your weight.\n"
+                                      f"⇨ ( 18-25 ) =  good condition.\n"
+                                      f"⇨ ( 16-18 ) =  your weight is below normal.\n"
+                                      f"⇨ ( 0-16 ) =  you must to increase your weight.\n"
+                                      f"⇨ ( 25-40 ) =  overweight, you must to decrease your weight.\n"
                                       f"In generally:\nThe weight index means the correspondence between "
                                       f"a person’s mass and his height."
                                       f"It's evaluating whether the weight is insufficient, normal or "
                                       f"excessive.\n"
                                       f"\n Your physical index: {physical_index}\n"
-                                      f"⇨ ( index>0.825 ) = 🦸 !Superman! 🦸\n"
-                                      f"⇨ ( 0.676-0.825 ) = 🥇 = above the average.\n"
-                                      f"⇨ ( 0.526-0.676 ) = 🥈 = average.\n"
-                                      f"⇨ ( index<0.526 ) = 🥉 = below average.\n"
+                                      f"⇨ ( index>0.825 ) =  !Superman! \n"
+                                      f"⇨ ( 0.676-0.825 ) =  = above the average.\n"
+                                      f"⇨ ( 0.526-0.676 ) =  = average.\n"
+                                      f"⇨ ( index<0.526 ) =  = below average.\n"
                                       f"In generaly:\n"
                                       f"Physical index it is a complex of morphological, physical and "
                                       f"functional indicators"
                                       f"that shows the state of your body.\n"
                                       f"If its value is below average, you "
                                       f"should do "
-                                      f"health training and change your lifestyle towards a healthier one.\n ",
+                                      f"health training and change your lifestyle towards a healthier one.\n"
+                                      f"\n Date: {date_} .",
                          ln=1, align='C')
 
                 # save the pdf with name .pdf
