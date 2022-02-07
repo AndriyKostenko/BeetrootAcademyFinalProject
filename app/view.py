@@ -535,6 +535,7 @@ def main():
         },
         fallbacks=[CommandHandler('cancel', cancel_handler), CallbackQueryHandler(cancel_handler, pattern='cancel'),
                    CommandHandler('start', start)],
+        allow_reentry=True
     )
 
     trainings_conv_handler = ConversationHandler(
@@ -544,7 +545,9 @@ def main():
             PUSH_UPS: [MessageHandler(Filters.text & (~Filters.command), push_ups_handler, pass_user_data=True), ],
             SIT_UPS: [MessageHandler(Filters.text & (~Filters.command), finish2_handler, pass_user_data=True), ],
         },
-        fallbacks=[CommandHandler('cancel', cancel_handler), CallbackQueryHandler(cancel_handler, pattern='cancel')],
+        fallbacks=[CommandHandler('cancel', cancel_handler), CallbackQueryHandler(cancel_handler, pattern='cancel'),
+                   CommandHandler('start', start)],
+        allow_reentry=True
     )
 
     # SQL database
@@ -558,7 +561,7 @@ def main():
     dp.add_handler(CommandHandler('motivate_yourself', motivate_yourself))
 
     # On non-command, i.e just text message
-    dp.add_handler(MessageHandler(Filters.text, manage_text))  # must be the last dispatcher
+    # dp.add_handler(MessageHandler(Filters.text, manage_text))  # must be the last dispatcher
 
     # Start the Bot
     updater.start_polling()
