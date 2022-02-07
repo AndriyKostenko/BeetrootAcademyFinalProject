@@ -603,7 +603,7 @@ def pdf_report(update: Update, context: CallbackContext):
                 res = pdf.output(f"Health-report.pdf")
                 context.bot.send_document(chat_id=update.effective_chat.id,
                                           document=open("Health-report.pdf", 'rb'))
-            except TypeError:
+            except (TypeError, AttributeError):
                 context.bot.send_message(chat_id=update.effective_chat.id,
                                          text="\n✖Not correct info. provided.\n"
                                               "Please check /show_info and update.")
