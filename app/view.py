@@ -552,14 +552,12 @@ def main():
     )
     # On different commands
 
-    dp.add_handler(CommandHandler('start', start), 2)
+    dp.add_handler(CommandHandler('start', start))
     dp.add_handler(CommandHandler('help', help_))
 
 
-
-
     # SQL database
-    dp.add_handler(personal_data_conv_handler, 1)
+    dp.add_handler(personal_data_conv_handler)
     dp.add_handler(trainings_conv_handler)
 
     dp.add_handler(CommandHandler('add_or_update_info', add_info))
