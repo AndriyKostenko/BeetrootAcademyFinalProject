@@ -542,9 +542,10 @@ def pdf_report(update: Update, context: CallbackContext):
     today = date.today()
     date_ = today.strftime("%d/%m/%Y")
     # save the pdf with name .pdf
-    res = pdf.output(f"Health-report {date_}.pdf")
+    res = pdf.output(f"Health-report.pdf")
     context.bot.send_message(chat_id=update.effective_chat.id,
                              text=f'Here your report {res}.')
+    return res
 
 
 
