@@ -11,3 +11,4 @@ class Config:
     TBOT_TOKEN = '5075706698:AAGFVZzWp0hZ4IEuyg0SnI71hy2NDXDuQPA'
     APP_URL = 'https://telegramsportbot.herokuapp.com/'
 
+

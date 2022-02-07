@@ -8,10 +8,12 @@ from telegram.ext import CallbackQueryHandler
 from datetime import date
 from app import db, fapp
 from config import Config
+from fpdf import FPDF
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# creating contsatnts for conversation-handlers
 NAME, SURNAME, AGE, HEIGHT, WEIGHT, PULSE, ARTERIAL_PRESSURE, PREFERABLE_SPORT, DATE = range(9)
 RUNNING, PUSH_UPS, SIT_UPS = range(3)
 
@@ -45,7 +47,7 @@ class Trainings(db.Model):
     date = db.Column(db.Integer)
 
 
-# starting the conversation for per.info
+# entry point for starting the conversation for per.info
 def add_info(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id,
                              text='1️⃣ Enter your name, please (ex. Andriy):', )
@@ -53,7 +55,7 @@ def add_info(update: Update, context: CallbackContext):
 
 
 def name_handler(update: Update, context: CallbackContext):
-    # receiving the name and teleg_id
+    # receiving the name
     username = update.effective_message.text
     # validating username
     regex = re.compile(r"^[^\W0-9_]+([ \-'‧][^\W0-9_]+)*?$", re.U)
@@ -82,6 +84,7 @@ def surname_handler(update: Update, context: CallbackContext):
         context.bot.send_message(chat_id=update.effective_chat.id,
                                  text='⚠ Please enter the correct surname(ex. Kostenko):')
         return SURNAME
+    # temporary saving the surname
     context.user_data['surname'] = surname
     context.bot.send_message(chat_id=update.effective_chat.id,
                              text='✔ Info accepted.',
@@ -172,6 +175,7 @@ def arterial_pressure_handler(update: Update, context: CallbackContext):
     return PREFERABLE_SPORT
 
 
+# exit point for finishing first conversation
 def finish_handler(update: Update, context: CallbackContext):
     telegram_user_id = update.message.from_user.id
     preferable_sport = update.effective_message.text.lower()
@@ -294,19 +298,18 @@ def check_health_condition(update: Update, context: CallbackContext):
                                               f"⇨ ( 16-18 ) = 🥈 = your weight is below normal.\n"
                                               f"⇨ ( 0-16 ) = 🥉 = you must to increase your weight.\n"
                                               f"⇨ ( 25-40 ) = 🥉 = overweight, you must to decrease your weight.\n"
-                                              f"In generally:\n"
-                                              f"The weight index means the correspondence between a person’s mass and his "
-                                              f"height."
-                                              f"It's evaluating whether the weight is insufficient, normal or excessive.\n"
-    
+                                              f"In generally:\nThe weight index means the correspondence between "
+                                              f"a person’s mass and his height."
+                                              f"It's evaluating whether the weight is insufficient, normal or "
+                                              f"excessive.\n"
                                               f"\n Your physical index: {physical_index}\n"
                                               f"⇨ ( index>0.825 ) = 🦸 !Superman! 🦸\n"
                                               f"⇨ ( 0.676-0.825 ) = 🥇 = above the average.\n"
                                               f"⇨ ( 0.526-0.676 ) = 🥈 = average.\n"
                                               f"⇨ ( index<0.526 ) = 🥉 = below average.\n"
                                               f"In generaly:\n"
-                                              f"Physical index it is a complex of morphological, physical and functional "
-                                              f"indicators"
+                                              f"Physical index it is a complex of morphological, physical and "
+                                              f"functional indicators"
                                               f"that shows the state of your body.\n"
                                               f"If its value is below average, you "
                                               f"should do "
@@ -325,6 +328,7 @@ def check_health_condition(update: Update, context: CallbackContext):
                                       "Please check /show_info and update.")
 
 
+# entry point for second conversation
 def plan_for_trainings(update: Update, context: CallbackContext):
     sticker = open('app/static/' + 'plan.webp', 'rb')
     context.bot.send_sticker(chat_id=update.message.chat_id, sticker=sticker)
@@ -367,6 +371,7 @@ def push_ups_handler(update: Update, context: CallbackContext):
     return SIT_UPS
 
 
+# exit point for finishing second conversation
 def finish2_handler(update: Update, context: CallbackContext):
     weekly_running_norma = 5  # km
     weekly_push_ups_norma = 200  # times
@@ -514,6 +519,34 @@ def cancel_handler(update: Update, context: CallbackContext):
     return ConversationHandler.END
 
 
+def pdf_report(update: Update, context: CallbackContext):
+    # save FPDF() class into a
+    # variable pdf
+    pdf = FPDF()
+
+    # Add a page
+    pdf.add_page()
+
+    # set style and size of font
+    # that you want in the pdf
+    pdf.set_font("Arial", size=15)
+
+    # create a cell
+    pdf.cell(200, 10, txt="GeeksforGeeks",
+             ln=1, align='C')
+
+    # add another cell
+    pdf.cell(200, 10, txt="A Computer Science portal for geeks.",
+             ln=2, align='C')
+
+    today = date.today()
+    date_ = today.strftime("%d/%m/%Y")
+    # save the pdf with name .pdf
+    res = pdf.output(f"Health-report {date_}.pdf")
+    return res
+
+
+
 @fapp.route('/', methods=['GET', 'POST'])
 def main():
     # Create the Updater
@@ -567,6 +600,7 @@ def main():
     dp.add_handler(CommandHandler('check_health_condition', check_health_condition))
     dp.add_handler(CommandHandler('plan_for_trainings', plan_for_trainings))
     dp.add_handler(CommandHandler('motivate_yourself', motivate_yourself))
+    dp.add_handler(CommandHandler('pdf_report', pdf_report))
 
     # On non-command, i.e just text message
     dp.add_handler(MessageHandler(Filters.text, manage_text))  # must be the last dispatcher
@@ -574,3 +608,6 @@ def main():
     # Start the Bot
     updater.start_polling()
     return "bot is working"
+
+
+
