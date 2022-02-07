@@ -519,8 +519,6 @@ def main():
     dp.add_handler(CommandHandler('start', start), 1)
     dp.add_handler(CommandHandler('help', help_), 1)
 
-    dp.add_handler(CommandHandler('start', start), 2)
-    dp.add_handler(CommandHandler('help', help_), 2)
 
     personal_data_conv_handler = ConversationHandler(
         entry_points=[CommandHandler('add_or_update_info', add_info)],
@@ -556,8 +554,8 @@ def main():
     )
 
     # SQL database
-    dp.add_handler(personal_data_conv_handler, 1)
-    dp.add_handler(trainings_conv_handler, 2)
+    dp.add_handler(personal_data_conv_handler, 2)
+    dp.add_handler(trainings_conv_handler, 3)
     dp.add_handler(CommandHandler('add_or_update_info', add_info))
     dp.add_handler(CommandHandler('remove_info', remove_info))
     dp.add_handler(CommandHandler('show_info', show_info))
