@@ -157,7 +157,9 @@ def pulse_handler(update: Update, context: CallbackContext):
 def arterial_pressure_handler(update: Update, context: CallbackContext):
     # receiving the art.pressure
     arterial_pressure = update.effective_message.text
-    if not arterial_pressure or arterial_pressure.isalpha() or arterial_pressure == '0':
+    regex = re.compile(r"(\d\d\d)[/](\d\d)")
+    res = regex.match(arterial_pressure)
+    if not arterial_pressure or not res:
         context.bot.send_message(chat_id=update.effective_chat.id,
                                  text='⚠ Please enter the correct arterial pressure (ex. 120/80)!')
         return ARTERIAL_PRESSURE
@@ -519,8 +521,6 @@ def main():
     dp.add_handler(CommandHandler('start', start))
     dp.add_handler(CommandHandler('help', help_))
 
-
-
     personal_data_conv_handler = ConversationHandler(
         entry_points=[CommandHandler('add_or_update_info', add_info)],
         states={
@@ -553,10 +553,6 @@ def main():
                    CommandHandler('start', start)],
         allow_reentry=True
     )
-
-
-
-
 
     # SQL database
     dp.add_handler(personal_data_conv_handler)
