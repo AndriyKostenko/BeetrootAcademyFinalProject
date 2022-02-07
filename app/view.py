@@ -521,35 +521,100 @@ def cancel_handler(update: Update, context: CallbackContext):
 
 
 def pdf_report(update: Update, context: CallbackContext):
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text="The document is gen")
-    # save FPDF() class into a
-    # variable pdf
-    pdf = FPDF()
-
-    # Add a page
-    pdf.add_page()
-
-    # set style and size of font
-    # that you want in the pdf
-    pdf.set_font("Arial", size=15)
-
-    # create a cell
-    pdf.cell(200, 10, txt="GeeksforGeeks",
-             ln=1, align='C')
-
-    # add another cell
-    pdf.cell(200, 10, txt="A Computer Science portal for geeks.",
-             ln=2, align='C')
-
+    telegram_user_id = update.message.from_user.id
+    user = Trainings.query.filter(telegram_user_id == Trainings.telegram_user_id).first()
     today = date.today()
     date_ = today.strftime("%d/%m/%Y")
-    # save the pdf with name .pdf
-    res = pdf.output(f"Health-report.pdf")
-    context.bot.send_document(chat_id=update.effective_chat.id,
-                             document=open("Health-report.pdf", 'rb'))
 
+    if user:
+        if user.height and user.weight and user.pulse and user.age and user.arterial_pressure:
+            try:
+                # weight_index_of_body = weight_kgs/(height_mtr^2)
+                weight_index = "{:.3}".format((user.weight / ((user.height / 100) ** 2)))
 
+                # physical_index = (700-(3*pulse)-(2.5*arterial_pressure)-(2.7*age)+(0.28*weight_kg)/
+                # (350-(2.6*age)+(0.21*height_cm)) -0.5))
+                # all other info are constants for thoose formula
+                physical_index = "{:.3}".format((
+                        (700 - (3 * user.pulse) - (2.5 * (eval(user.arterial_pressure))) - (2.7 * user.age)) /
+                        (350 - (2.6 * user.age) + (0.21 * user.height)) - 0.5))
+
+                context.bot.send_message(chat_id=update.effective_chat.id,
+                                         text=f"🏆 Health Condition Report 🏆\n"
+                                              f"\nYour weight index: {weight_index}\n"
+                                              f"⇨ ( 18-25 ) = 🥇 = good condition.\n"
+                                              f"⇨ ( 16-18 ) = 🥈 = your weight is below normal.\n"
+                                              f"⇨ ( 0-16 ) = 🥉 = you must to increase your weight.\n"
+                                              f"⇨ ( 25-40 ) = 🥉 = overweight, you must to decrease your weight.\n"
+                                              f"In generally:\nThe weight index means the correspondence between "
+                                              f"a person’s mass and his height."
+                                              f"It's evaluating whether the weight is insufficient, normal or "
+                                              f"excessive.\n"
+                                              f"\n Your physical index: {physical_index}\n"
+                                              f"⇨ ( index>0.825 ) = 🦸 !Superman! 🦸\n"
+                                              f"⇨ ( 0.676-0.825 ) = 🥇 = above the average.\n"
+                                              f"⇨ ( 0.526-0.676 ) = 🥈 = average.\n"
+                                              f"⇨ ( index<0.526 ) = 🥉 = below average.\n"
+                                              f"In generaly:\n"
+                                              f"Physical index it is a complex of morphological, physical and "
+                                              f"functional indicators"
+                                              f"that shows the state of your body.\n"
+                                              f"If its value is below average, you "
+                                              f"should do "
+                                              f"health training and change your lifestyle towards a healthier one.\n ")
+
+                # save FPDF() class into a
+                # variable pdf
+                pdf = FPDF()
+
+                # Add a page
+                pdf.add_page()
+
+                # set style and size of font
+                # that you want in the pdf
+                pdf.set_font("Arial", size=15)
+
+                # create a cell
+                pdf.cell(200, 10, txt=f"🏆 Health Condition Report 🏆\n"
+                                      f"\nYour weight index: {weight_index}\n"
+                                      f"⇨ ( 18-25 ) = 🥇 = good condition.\n"
+                                      f"⇨ ( 16-18 ) = 🥈 = your weight is below normal.\n"
+                                      f"⇨ ( 0-16 ) = 🥉 = you must to increase your weight.\n"
+                                      f"⇨ ( 25-40 ) = 🥉 = overweight, you must to decrease your weight.\n"
+                                      f"In generally:\nThe weight index means the correspondence between "
+                                      f"a person’s mass and his height."
+                                      f"It's evaluating whether the weight is insufficient, normal or "
+                                      f"excessive.\n"
+                                      f"\n Your physical index: {physical_index}\n"
+                                      f"⇨ ( index>0.825 ) = 🦸 !Superman! 🦸\n"
+                                      f"⇨ ( 0.676-0.825 ) = 🥇 = above the average.\n"
+                                      f"⇨ ( 0.526-0.676 ) = 🥈 = average.\n"
+                                      f"⇨ ( index<0.526 ) = 🥉 = below average.\n"
+                                      f"In generaly:\n"
+                                      f"Physical index it is a complex of morphological, physical and "
+                                      f"functional indicators"
+                                      f"that shows the state of your body.\n"
+                                      f"If its value is below average, you "
+                                      f"should do "
+                                      f"health training and change your lifestyle towards a healthier one.\n ",
+                         ln=1, align='C')
+
+                # save the pdf with name .pdf
+                res = pdf.output(f"Health-report.pdf")
+                context.bot.send_document(chat_id=update.effective_chat.id,
+                                          document=open("Health-report.pdf", 'rb'))
+            except TypeError:
+                context.bot.send_message(chat_id=update.effective_chat.id,
+                                         text="\n✖Not correct info. provided.\n"
+                                              "Please check /show_info and update.")
+        else:
+            context.bot.send_message(chat_id=update.effective_chat.id,
+                                     text="\n✖Not enough info. provided.\n"
+                                          "Please check /show_info and update.")
+    else:
+        context.bot.send_message(chat_id=update.effective_chat.id,
+                                 text="\n✖Not enough info. provided.\n"
+                                      "Please check /show_info and update.")
 
 
 @fapp.route('/', methods=['GET', 'POST'])
@@ -613,6 +678,3 @@ def main():
     # Start the Bot
     updater.start_polling()
     return "bot is working"
-
-
-
