@@ -522,7 +522,7 @@ def cancel_handler(update: Update, context: CallbackContext):
 
 def pdf_report(update: Update, context: CallbackContext):
     telegram_user_id = update.message.from_user.id
-    user = Trainings.query.filter(telegram_user_id == Trainings.telegram_user_id).first()
+    user = Users.query.filter(telegram_user_id == Users.telegram_user_id).first()
     today = date.today()
     date_ = today.strftime("%d/%m/%Y")
 
