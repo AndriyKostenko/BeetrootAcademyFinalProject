@@ -503,7 +503,8 @@ def help_(update: Update, context: CallbackContext):
                                   "\n‍🔥 Things you can check 🔥️\n"
                                   "- /check_health_condition: to check your current physical condition.\n"
                                   "- /plan_for_trainings: check the training plan.\n"
-                                  "- /motivate_yourself: random videos for motivation")
+                                  "- /motivate_yourself: random videos for motivation"
+                                  "- /pdf_report ")
     return ConversationHandler.END
 
 
@@ -520,6 +521,8 @@ def cancel_handler(update: Update, context: CallbackContext):
 
 
 def pdf_report(update: Update, context: CallbackContext):
+    context.bot.send_message(chat_id=update.effective_chat.id,
+                             text="The document is generating now.")
     # save FPDF() class into a
     # variable pdf
     pdf = FPDF()
@@ -543,13 +546,15 @@ def pdf_report(update: Update, context: CallbackContext):
     date_ = today.strftime("%d/%m/%Y")
     # save the pdf with name .pdf
     res = pdf.output(f"Health-report.pdf")
-    context.bot.send_message(chat_id=update.effective_chat.id,
-                             text=f'Here your report {res}.')
-    return res
+    context.bot.send_document(chat_id=update.effective_chat.id,
+                             document=open("Health-report.pdf", 'rb')
+
 
 
 
 @fapp.route('/', methods=['GET', 'POST'])
+
+
 def main():
     # Create the Updater
     updater = Updater(Config.TBOT_TOKEN, use_context=True)
