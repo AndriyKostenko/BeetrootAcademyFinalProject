@@ -563,6 +563,8 @@ def pdf_report(update: Update, context: CallbackContext):
                          ln=4, align='C')
                 pdf.cell(200, 10, txt=f"Date: {date_} ",
                          ln=5, align='C')
+                image = 'for_pdf.jpg'
+                pdf.image(image)
 
                 # save the pdf with name .pdf
                 res = pdf.output(f"Health-report.pdf")
