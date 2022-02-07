@@ -62,7 +62,7 @@ def name_handler(update: Update, context: CallbackContext):
         context.bot.send_message(chat_id=update.effective_chat.id,
                                  text='⚠ Please enter correct username (ex. Andriy):')
         return NAME
-    # temp. saving to the teleg. session
+    # temp. saving data to the teleg. session
     context.user_data['username'] = username
     context.bot.send_message(chat_id=update.effective_chat.id,
                              text='✔ Info accepted.',
@@ -276,40 +276,45 @@ def check_health_condition(update: Update, context: CallbackContext):
 
     if user:
         if user.height and user.weight and user.pulse and user.age and user.arterial_pressure:
-            # weight_index_of_body = weight_kgs/(height_mtr^2)
-            weight_index = "{:.3}".format((user.weight / ((user.height / 100) ** 2)))
+            try:
+                # weight_index_of_body = weight_kgs/(height_mtr^2)
+                weight_index = "{:.3}".format((user.weight / ((user.height / 100) ** 2)))
 
-            # physical_index = (700-(3*pulse)-(2.5*arterial_pressure)-(2.7*age)+(0.28*weight_kg)/
-            # (350-(2.6*age)+(0.21*height_cm)) -0.5))
-            # all other info are constants for thoose formula
-            physical_index = "{:.3}".format((
-                    (700 - (3 * user.pulse) - (2.5 * (eval(user.arterial_pressure))) - (2.7 * user.age)) /
-                    (350 - (2.6 * user.age) + (0.21 * user.height)) - 0.5))
+                # physical_index = (700-(3*pulse)-(2.5*arterial_pressure)-(2.7*age)+(0.28*weight_kg)/
+                # (350-(2.6*age)+(0.21*height_cm)) -0.5))
+                # all other info are constants for thoose formula
+                physical_index = "{:.3}".format((
+                        (700 - (3 * user.pulse) - (2.5 * (eval(user.arterial_pressure))) - (2.7 * user.age)) /
+                        (350 - (2.6 * user.age) + (0.21 * user.height)) - 0.5))
 
-            context.bot.send_message(chat_id=update.effective_chat.id,
-                                     text=f"🏆 Health Condition Report 🏆\n"
-                                          f"\nYour weight index: {weight_index}\n"
-                                          f"⇨ ( 18-25 ) = 🥇 = good condition.\n"
-                                          f"⇨ ( 16-18 ) = 🥈 = your weight is below normal.\n"
-                                          f"⇨ ( 0-16 ) = 🥉 = you must to increase your weight.\n"
-                                          f"⇨ ( 25-40 ) = 🥉 = overweight, you must to decrease your weight.\n"
-                                          f"In generally:\n"
-                                          f"The weight index means the correspondence between a person’s mass and his "
-                                          f"height."
-                                          f"It's evaluating whether the weight is insufficient, normal or excessive.\n"
-
-                                          f"\n Your physical index: {physical_index}\n"
-                                          f"⇨ ( index>0.825 ) = 🦸 !Superman! 🦸\n"
-                                          f"⇨ ( 0.676-0.825 ) = 🥇 = above the average.\n"
-                                          f"⇨ ( 0.526-0.676 ) = 🥈 = average.\n"
-                                          f"⇨ ( index<0.526 ) = 🥉 = below average.\n"
-                                          f"In generaly:\n"
-                                          f"Physical index it is a complex of morphological, physical and functional "
-                                          f"indicators"
-                                          f"that shows the state of your body.If its value is below average, you "
-                                          f"should do "
-                                          f"health training and change your lifestyle towards a healthier one.\n ")
-
+                context.bot.send_message(chat_id=update.effective_chat.id,
+                                         text=f"🏆 Health Condition Report 🏆\n"
+                                              f"\nYour weight index: {weight_index}\n"
+                                              f"⇨ ( 18-25 ) = 🥇 = good condition.\n"
+                                              f"⇨ ( 16-18 ) = 🥈 = your weight is below normal.\n"
+                                              f"⇨ ( 0-16 ) = 🥉 = you must to increase your weight.\n"
+                                              f"⇨ ( 25-40 ) = 🥉 = overweight, you must to decrease your weight.\n"
+                                              f"In generally:\n"
+                                              f"The weight index means the correspondence between a person’s mass and his "
+                                              f"height."
+                                              f"It's evaluating whether the weight is insufficient, normal or excessive.\n"
+    
+                                              f"\n Your physical index: {physical_index}\n"
+                                              f"⇨ ( index>0.825 ) = 🦸 !Superman! 🦸\n"
+                                              f"⇨ ( 0.676-0.825 ) = 🥇 = above the average.\n"
+                                              f"⇨ ( 0.526-0.676 ) = 🥈 = average.\n"
+                                              f"⇨ ( index<0.526 ) = 🥉 = below average.\n"
+                                              f"In generaly:\n"
+                                              f"Physical index it is a complex of morphological, physical and functional "
+                                              f"indicators"
+                                              f"that shows the state of your body.\n"
+                                              f"If its value is below average, you "
+                                              f"should do "
+                                              f"health training and change your lifestyle towards a healthier one.\n ")
+            except TypeError:
+                context.bot.send_message(chat_id=update.effective_chat.id,
+                                         text="\n✖Not correct info. provided.\n"
+                                              "Please check /show_info and update.")
         else:
             context.bot.send_message(chat_id=update.effective_chat.id,
                                      text="\n✖Not enough info. provided.\n"
@@ -498,7 +503,7 @@ def help_(update: Update, context: CallbackContext):
 
 
 def button_back_menu():
-    button = [[InlineKeyboardButton('Cancel', callback_data='cancel')]]
+    button = [[InlineKeyboardButton('Break conversation.', callback_data='cancel')]]
     return InlineKeyboardMarkup(button)
 
 
@@ -538,7 +543,6 @@ def main():
         fallbacks=[MessageHandler(Filters.command, cancel_handler), CommandHandler('cancel', cancel_handler),
                    CallbackQueryHandler(cancel_handler, pattern='cancel'),
                    CommandHandler('start', start)],
-        allow_reentry=True
     )
 
     trainings_conv_handler = ConversationHandler(
@@ -551,7 +555,6 @@ def main():
         fallbacks=[MessageHandler(Filters.command, cancel_handler), CommandHandler('cancel', cancel_handler),
                    CallbackQueryHandler(cancel_handler, pattern='cancel'),
                    CommandHandler('start', start)],
-        allow_reentry=True
     )
 
     # SQL database
