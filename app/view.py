@@ -553,7 +553,7 @@ def pdf_report(update: Update, context: CallbackContext):
                 pdf.set_font("Arial", size=15)
 
                 # create a cell
-                pdf.cell(200, 10, txt=f" Health Condition Report \n"
+                pdf.cell(200, 10, txt="""f" Health Condition Report \n"
                                       f"\nYour weight index: {weight_index}\n"
                                       f"( 18-25 ) =  good condition.\n"
                                       f"( 16-18 ) =  your weight is below normal.\n"
@@ -575,7 +575,7 @@ def pdf_report(update: Update, context: CallbackContext):
                                       f"If its value is below average, you "
                                       f"should do "
                                       f"health training and change your lifestyle towards a healthier one.\n"
-                                      f"\n Date: {date_} .",
+                                      f"\n Date: {date_} .""",
                          ln=1, align='C')
 
                 # save the pdf with name .pdf
