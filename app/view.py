@@ -515,6 +515,7 @@ def main():
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
 
+    # On different commands
     dp.add_handler(CommandHandler('start', start))
     dp.add_handler(CommandHandler('help', help_))
 
@@ -552,7 +553,7 @@ def main():
                    CommandHandler('start', start)],
         allow_reentry=True
     )
-    # On different commands
+
 
 
 
