@@ -13,7 +13,7 @@ from fpdf import FPDF
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# creating contsatnts for conversation-handlers
+# creating constants for conversation-handlers
 NAME, SURNAME, AGE, HEIGHT, WEIGHT, PULSE, ARTERIAL_PRESSURE, PREFERABLE_SPORT, DATE = range(9)
 RUNNING, PUSH_UPS, SIT_UPS = range(3)
 
@@ -549,10 +549,9 @@ def pdf_report(update: Update, context: CallbackContext):
                 pdf.add_page()
 
                 # set style and size of font
-                # that you want in the pdf
                 pdf.set_font("Arial", size=18)
 
-                # create a cell
+                # creating a cells
                 pdf.cell(200, 10, txt="Health Condition Report",
                          ln=1, align='C')
                 pdf.cell(200, 10, txt=f"for: {update.effective_user.first_name} ",
@@ -563,11 +562,12 @@ def pdf_report(update: Update, context: CallbackContext):
                          ln=4, align='C')
                 pdf.cell(200, 10, txt=f"Date: {date_} ",
                          ln=5, align='C')
-                image = 'for_pdf.jpg'
+                image = open('app/static/' + 'for_pdf.jpg', 'rb')
+                # image = 'for_pdf.jpg'
                 pdf.image(image, x=70, y=70, w=90)
 
                 # save the pdf with name .pdf
-                res = pdf.output(f"Health-report.pdf")
+                res = pdf.output("Health-report.pdf")
                 context.bot.send_document(chat_id=update.effective_chat.id,
                                           document=open("Health-report.pdf", 'rb'))
             except (TypeError, AttributeError):
