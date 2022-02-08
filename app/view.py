@@ -562,7 +562,7 @@ def pdf_report(update: Update, context: CallbackContext):
                          ln=4, align='C')
                 pdf.cell(200, 10, txt=f"Date: {date_} ",
                          ln=5, align='C')
-                image = open('app/static/' + 'for_pdf.jpg', 'rb')
+                image = 'app/static/for_pdf.jpg'
                 # image = 'for_pdf.jpg'
                 pdf.image(image, x=70, y=70, w=90)
 
