@@ -1,4 +1,4 @@
-Hello, this is my final project after studying in Beetroot Academy.
+Hello, this is my telegram-bot.
 
 This is Telegram-Sport-Bot wрich is hosted on Heroku, done wit Python v3.8.
 
