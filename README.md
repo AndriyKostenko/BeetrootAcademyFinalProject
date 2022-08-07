@@ -1,6 +1,6 @@
 # Hello, this is my Telegram-bot.
 
-This is Telegram-Sport-Bot wрich is hosted on Heroku, done wit Python v3.8.
+This is Telegram-Sport-Bot which has hosted on Heroku, done with Python v3.8
 
 # Stack:
 
@@ -16,7 +16,7 @@ This is Telegram-Sport-Bot wрich is hosted on Heroku, done wit Python v3.8.
 - removing data from the database;
 - calculating phisical condition;
 - generating training plan;
-- generating videos from youtube;
+- generating specific videos from youtube;
 - generating pdf file.
 
 
