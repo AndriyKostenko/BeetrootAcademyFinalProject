@@ -5,7 +5,7 @@ This is Telegram-Sport-Bot which has hosted on Heroku, done with Python v3.8
 # Stack:
 
   - Python3
-  - Telegram
+  - Telegram-bot
   - SQlite
   - fpdf
 
@@ -18,6 +18,15 @@ This is Telegram-Sport-Bot which has hosted on Heroku, done with Python v3.8
 - generating training plan;
 - generating specific videos from youtube;
 - generating pdf file.
+
+# To start the project:
+
+- `git clone https://github.com/AndriyKostenko/Telegram_bot_project.git` download the project
+- `python3 -m venv venv` installing virtual 
+- `source venv/bin/activate` activating venv
+- `pip3 install -r requirements.txt` installing all the requirements for the following project
+- generate the bot key in Telegram app and insert into config.py
+- run `python3 bot_app.py`
 
 
 

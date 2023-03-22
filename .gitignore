@@ -1,1 +1,6 @@
 /venv/
+Health-report.pdf
+.idea/
+__pycache__
+migrations/
+app/__pycache__/

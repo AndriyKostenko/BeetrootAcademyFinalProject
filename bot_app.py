@@ -1,4 +1,5 @@
-from app import fapp, Config
+from config import Config
+from app import fapp
 
 
 if __name__ == '__main__':
